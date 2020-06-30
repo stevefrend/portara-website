@@ -1,0 +1,10 @@
+FROM node:10.15
+WORKDIR /usr/src/app/client
+COPY client/package*.json ./
+RUN npm install --silent
+# RUN npm install react-scripts@3.0.1 -g --silent 
+COPY . /usr/src/app
+
+EXPOSE 3000
+
+CMD npm start

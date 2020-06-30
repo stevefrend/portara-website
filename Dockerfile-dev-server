@@ -1,0 +1,12 @@
+FROM node:10.15
+WORKDIR /usr/src/app/server
+COPY server/package*.json ./
+RUN npm install --silent
+
+COPY . /usr/src/app
+
+EXPOSE 4000
+
+COPY .env ./
+
+CMD npm run dev

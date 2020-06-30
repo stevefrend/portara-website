@@ -1,0 +1,22 @@
+version: "3.7"
+services: 
+  portara-dev-server:
+    image: portara-dev-server
+    env_file: 
+      - .env    
+    ports:
+      - "4000:4000"
+  portara-dev-client:
+    image: portara-dev-client
+    # volumes:
+    #   - '.:/app'
+    #   - '/usr/src/app/client/node_modules'
+    ports:
+      - "3000:3000"
+    depends_on: 
+      - portara-dev-server
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    tty: true
+
+

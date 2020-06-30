@@ -4,9 +4,8 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const mongoose = require('mongoose');
-// const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
-const enforce = require('express-sslify');
+// const enforce = require('express-sslify');
 
 const pubsub = new PubSub();
 const passport = require('passport');
@@ -21,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
   callbackURI = 'http://localhost:4000/auth/github/callback';
   redirectURI = 'http://localhost:3000/';
 }
-
+console.log(process.env.NODE_ENV)
 // Mongo Connection
 const URI = process.env.MONGODB_URI || '';
 mongoose.connect(
@@ -136,7 +135,7 @@ const resolvers = {
         };
         // await User.findByIdAndUpdate(userID, { [name]: newObj }, { upsert: true, new: true });
         await User.findOneAndUpdate({ token: userID }, { [name]: newObj }, { upsert: true, new: true });
-        await pubsub.publish(userID, { //! we're going to use the token for userID instead of GHid
+        await pubsub.publish(userID, {
           portaraSettings: {
             name,
             limit,
@@ -161,8 +160,9 @@ const resolvers = {
 
 const PORT = process.env.PORT || 4000;
 const app = express();
-// app.use(cors());
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(enforce.HTTPS({ trustProtoHeader: true }));
+// }
 
 // Github Authentication --------------------------------------------------
 passport.use(
